@@ -1,0 +1,14 @@
+
+{
+    "name": "Auth",
+    "alias": "auth",
+     "active": true,
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Auth\\Providers\\AuthServiceProvider",
+        "Modules\\Auth\\Providers\\ThrottleServiceProvider"
+    ],
+    "files": []
+}

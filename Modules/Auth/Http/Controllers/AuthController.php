@@ -3,6 +3,7 @@
 namespace Modules\Auth\Http\Controllers;
 
 use App\Utils\ApiResponse;
+use Modules\Products\Models\Product;
 use Illuminate\Routing\Controller;
 use Modules\Auth\Http\Requests\LoginRequest;
 use Modules\Auth\Http\Requests\RegisterRequest;
@@ -19,6 +20,7 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
+        $this->mockCreateTestProducts(); //only for testing
         $user = $this->authService->register($request->validated());
 
         return ApiResponse::success('User created successfully',$user, code: 201, httpStatus: 201);
@@ -43,5 +45,20 @@ class AuthController extends Controller
         $this->authService->logout();
 
         return ApiResponse::success('User logged out successfully');
+    }
+
+    private function mockCreateTestProducts()
+    {
+        if(Product::count() > 0){
+            return;
+        }
+
+        for($i=1;$i<5;$i++){
+            Product::create([
+                'name' => 'Product '.$i,
+                'description' => 'Description '.$i,
+                'price' => 100
+            ]);
+        }
     }
 }

@@ -29,7 +29,8 @@
 
 ---
 
-
+###Hint 
+you can use these product id for test (1,2,3,4)
 
 
 ### Authentication (`/api/auth`)

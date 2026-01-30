@@ -55,7 +55,7 @@
 | GET | `/api/payments` | List all payments |
 | POST | `/api/payments/orders/{id}/pay` | Process payment for order |
 | GET | `/api/payments/orders/{id}` | Get payments for specific order |
-| GET | `/api/payments/orders/{id}/list` | List payments for order |
+| GET | `/api/payments/orders/{id}/list` | List payments for users |
 
 ---
 
@@ -70,8 +70,8 @@
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd order-payment-api
+git clone https://github.com/mahabozaid/payment-task.git
+cd payment-task
 
 # Install dependencies
 composer install

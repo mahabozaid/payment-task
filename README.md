@@ -1,59 +1,184 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Order & Payment API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 🚀 Features
 
-## About Laravel
+### Core Functionality
+- **Order Management**: Create, read, update, delete orders with status tracking
+- **Payment Processing**: Secure payment processing with multiple gateway support
+- **Multi-Gateway Support**: Credit Card and PayPal integration (extensible)
+- **JWT Authentication**: Secure API access with token-based authentication
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Architecture Highlights
+- **Modular Design**: Laravel Modules package for clean code separation
+- **Strategy Pattern**: Extensible payment gateway implementation
+- **Repository Pattern**: Clean data access layer abstraction
+- **DTO Pattern**: Structured data transfer between layers
+- **Service Layer**: Business logic encapsulation
+- **Custom Exception Handling**: Structured API error responses
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🛠️ Technology Stack
 
-## Learning Laravel
+- **PHP 8.4+** - Modern PHP with strict typing
+- **Laravel 12** - Latest Laravel framework
+- **Laravel Modules** - Modular architecture use this package (https://nwidart.com/laravel-modules/v6/introduction)
+- **JWT Auth** - Token-based authentication
+- **MySQL** - Database support
+- **PHPUnit** - Comprehensive testing
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-### Premium Partners
+### Authentication (`/api/auth`)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/register` | Register new user |
+| POST | `/api/auth/login` | Login and get JWT token |
+| POST | `/api/auth/refresh-token` | Refresh JWT token |
+| POST | `/api/auth/logout` | Logout (invalidate token) |
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Orders (`/api/orders`)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/orders` | List all orders (paginated) |
+| POST | `/api/orders` | Create new order |
+| GET | `/api/orders/{id}` | Get order details |
+| PUT | `/api/orders/{id}` | Update order |
+| DELETE | `/api/orders/{id}` | Delete order |
 
-## Contributing
+### Payments (`/api/payments`)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/payments` | List all payments |
+| POST | `/api/payments/orders/{id}/pay` | Process payment for order |
+| GET | `/api/payments/orders/{id}` | Get payments for specific order |
+| GET | `/api/payments/orders/{id}/list` | List payments for order |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 🔧 Setup Instructions
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Prerequisites
+- PHP 8.4+
+- Composer
+- MySQL  
 
-## Security Vulnerabilities
+### Option 1: Local Development
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+# Clone the repository
+git clone <repository-url>
+cd order-payment-api
 
-## License
+# Install dependencies
+composer install
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Copy environment file
+cp .env.example .env
+
+# Generate application key
+php artisan key:generate
+
+# create new db called(ecommerce_db) to run migrations
+
+# Run migrations
+php artisan migrate
+
+# Start development server
+php artisan serve
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+
+php artisan test
+```
+
+
+---
+
+## 💳 Payment Gateway Extensibility
+
+### Adding a New Payment Gateway
+
+**Step 1: Create the Gateway Class**
+
+```php
+// Modules/Payments/Gateways/StripeGateway.php
+namespace Modules\Payments\Gateways;
+
+use Modules\Orders\Models\Order;
+use Modules\Payments\Enums\PaymentMethodEnum;
+use Modules\Payments\Enums\PaymentStatusEnum;
+use Modules\Payments\DTO\PaymentResultDTO;
+
+class StripeGateway implements PaymentGatewayInterface
+{
+    public function pay(Order $order, array $data): PaymentResultDTO
+    {
+        // Stripe API integration here
+        // Return PaymentResultDTO with payment details
+        
+        return new PaymentResultDTO(
+            payment_id: 'stripe_' . uniqid(),
+            status: PaymentStatusEnum::SUCCESSFUL,
+            method: PaymentMethodEnum::STRIPE,
+            metadata: $data
+        );
+    }
+}
+```
+
+**Step 2: Add Enum Value**
+
+```php
+// Modules/Payments/Enums/PaymentMethodEnum.php
+enum PaymentMethodEnum :int
+{
+    case CREDIT_CARD = 1;
+    case PAYPAL = 2;
+    case STRIPE = 3;  // Add new gateway
+}
+```
+
+**Step 3: Update Factory**
+
+```php
+// Modules/Payments/Factories/PaymentGatewayFactory.php
+class PaymentGatewayFactory
+{
+    public static function make(string $method): PaymentGatewayInterface
+    {
+        return match((int)$method) {
+            PaymentMethodEnum::CREDIT_CARD->value => new CreditCardGateway(),
+            PaymentMethodEnum::PAYPAL->value => new PayPalGateway(),
+            PaymentMethodEnum::STRIPE->value => new StripeGateway(), // Add new gateway
+            default => throw new InvalidArgumentException("Payment method {$method} not supported")
+        };
+    }
+}
+```
+
+**No changes needed to:**
+- `PayOrderService` - Business logic remains unchanged
+- Controllers - Same API interface
+- Frontend clients - Same request format
+- Existing tests - Continue to work
+
+---
+
+## 🔒 Security Features
+
+- **JWT Authentication**: Secure token-based API access
+- **Request Validation**: Form request validation classes
+- **SQL Injection Protection**: Laravel's built-in protection
+- **Mass Assignment Protection**: `$guarded` properties on models
+- **Rate Limiting**: Configured for auth endpoints
+- **Ownership Validation**: `OwnedBy` scope ensures users access only their data
+- **Payment Idempotency**: Prevents duplicate payments for same order
+
